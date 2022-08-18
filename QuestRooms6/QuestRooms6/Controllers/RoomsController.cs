@@ -24,22 +24,6 @@ namespace QuestRooms6.Controllers
         }
 
 
-        public ActionResult GetImageFromByteArray()
-        {
-            // Get image path  
-            string imgPath = "D:\\Dapper.png";
-            // Convert image to byte array  
-            byte[] byteData = System.IO.File.ReadAllBytes(imgPath);
-            //Convert byte arry to base64string   
-            string imreBase64Data = Convert.ToBase64String(byteData);
-            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-            //Passing image data in viewbag to view  
-            ViewBag.ImageData = imgDataURL;
-            return View();
-        }
-
-
-
         public async Task<IActionResult> Index(string? searchName = null,
             int? searchCountPlayer = null,
             double? searchPrice = null,
@@ -47,14 +31,6 @@ namespace QuestRooms6.Controllers
             string? ScrFerLvl = null,
             string? inputreset = null)
         {
-
-
-
-
-
-
-
-
 
             IEnumerable<Room>? rooms = _questRoomsContextDb.Rooms;
             if (inputreset == null)
@@ -117,26 +93,14 @@ namespace QuestRooms6.Controllers
                     return NotFound();
 
 
-
-
-
                 //Convert byte arry to base64string   
                 string imreBase64Data = Convert.ToBase64String(room.BytesImage);
                 string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
                 //Passing image data in viewbag to view  
                 ViewBag.ImageData = imgDataURL;
-
-
-
-
                 return View(room);
             }
         }
-
-
-
-
-
 
 
         //Post - Upsert (Views-->Upsert(only UPDATE) )
@@ -231,13 +195,6 @@ namespace QuestRooms6.Controllers
                         convertByte = new byte[ReadImageFile(pathstringforFile).Length];
                         convertByte = ReadImageFile(pathstringforFile);
                         objFromDB.BytesImage = convertByte;
-
-
-
-
-
-
-
                         objFromDB.Name = room.Name;
                         objFromDB.Description = room.Description;
                         objFromDB.CountPlayers = room.CountPlayers;
@@ -263,12 +220,6 @@ namespace QuestRooms6.Controllers
         }
 
 
-
-
-
-
-
-
         public static byte[] ReadImageFile(string imageLocation)
         {
             byte[] imageData = null;
@@ -279,16 +230,6 @@ namespace QuestRooms6.Controllers
             imageData = br.ReadBytes((int)imageFileLength);
             return imageData;
         }
-
-
-
-
-
-
-
-
-
-
 
 
 
