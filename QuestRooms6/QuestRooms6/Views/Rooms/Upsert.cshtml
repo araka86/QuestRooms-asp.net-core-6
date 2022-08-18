@@ -1,0 +1,162 @@
+﻿@model QuestRooms6_Model.Room
+@{
+    var title = "Create Rooms";
+}
+<form method="post" enctype="multipart/form-data">
+
+    @if (Model.Id != 0) @* For button update *@
+    {
+        title = "Edit Rooms";
+        <input asp-for="Id" hidden />
+    }
+    <div class="border p-3 bg-white ">
+        <div class=form-group p-3>
+            <h2 class="text-info pl-3">@title</h2> @*использования title*@
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                @*---------> Name <---------*@
+                <div class="form-group row py-2">
+                    <div class="col-md-4">
+                        <label asp-for="Name"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span> @*строка валидации*@
+                    </div>
+                </div>
+                @*---------> Description <---------*@
+                <div class="form-group row py-2">
+
+                    <div class="col-md-4">
+                        <label asp-for="Description"></label>
+
+                    </div>
+                    <div class="col-md-8">
+                        <textarea asp-for="Description" class="form-control summernote"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                @*---------> Count players <---------*@
+
+                <div class="form-group row py-2">
+                    <div class="col-md-4">
+                        <label asp-for="CountPlayers"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="CountPlayers" class="form-control" />
+                        <span asp-validation-for="CountPlayers" class="text-danger"></span> @*строка валидации*@
+                    </div>
+                </div>
+                @*---------> Price <---------*@
+                <div class="form-group row py-2">
+                    <div class="col-md-4">
+                        <label asp-for="Price"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span> @*строка валидации*@
+                    </div>
+                </div>
+                @*---------> Dificult Level <---------*@
+                <div class="form-group row py-2">
+                    <div class="col-md-4">
+                        <label asp-for="DifltLevel" class="control-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="DifficultLevel" class="form-control" asp-items="@Html.GetEnumSelectList<DifficultLevel>() "></select>
+                        @*   <option selected value="@Model.DifficultLevel" ></option>*@
+
+                        <span asp-validation-for="DifltLevel" class="text-danger"></span>
+                    </div>
+                </div>
+                @*---------> FearLevel <---------*@
+                <div class="form-group row py-2">
+                    <div class="col-md-4">
+                        <label asp-for="FLevel" class="control-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="FearLevel" class="form-control" asp-items="@Html.GetEnumSelectList<FearLevel>()"></select>
+
+                        <span asp-validation-for="FearLevel" class="text-danger"></span>
+                    </div>
+                </div>
+                @*---------> Image <---------*@
+                <div class="form-group row py-2">
+                    <div class="col-md-4">
+                        Image
+                    </div>
+                    <div class="col-md-8">
+                        <input type="file" name="fileimg" id="fileimg" multiple class="form-control" uploadFiles(inputId) />
+                    </div>
+
+                </div>
+
+                @*---------> Button ---------*@
+
+                <div class="form-group row py-2">
+                    <div class="col-md-8 offset-4 row">
+                        <div class="col">
+                            @if (User.IsInRole(WebConstanta.AdminRole))
+                            {
+                                @if (Model.Id != 0)
+                                {
+                                    //update
+                                    <div class="col">
+                                        <input type="submit" class="btn btn-info w-100 form-control " value="Update" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <input type="submit" id="btn-create" onclick="return validateInput()" class="btn btn-primary w-100 btn-create" value="Create" />
+                                
+                                }
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-info w-100 " value="Buy Order" />
+                            }
+                        </div>
+                        @*-------> Back <-------*@
+                        @if (Model.Id != 0)
+                        {
+                            <div class="col">
+                                <input type="submit" onclick="return validateInput()" asp-controller="Rooms" value="Delete" asp-action="Delete" asp-route-Id="@Model.Id" class="btn btn-danger w-100 form-control" />
+                            </div>
+                        }
+                        <div class="col">
+                            <a asp-controller="Rooms" asp-action="Index" class="btn btn-success  w-100 form-control">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.Id != 0)
+            {
+                <div class="col-md-4 ">
+                 @*   <img src="@WebConstanta.ImagePath@Model.Image" class="w-100" style="border-radius:15px; border:1px solid #bbb; " />*@
+               
+                     <img src="@ViewBag.ImageData" class="w-100" style="border-radius:15px; border:1px solid #bbb; " />
+                </div>
+            }
+        </div>
+    </div>
+</form>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+   
+
+
+
+
+
+
+
+
+    }

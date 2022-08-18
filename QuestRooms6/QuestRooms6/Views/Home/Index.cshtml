@@ -1,0 +1,117 @@
+﻿@model QuestRooms6_Model.ViewModels.IndexViewModel
+<div class="container pb-5">
+    <div class="text-center pb-4">
+        <h4>Dificult Level</h4>
+        <button class="btn btn-dark filter-button" data-filter="all">All</button>
+        @foreach (var obj in Enum.GetValues(typeof(DifficultLevel)))
+        {
+            <button class="btn btn-outline-secondary filter-button" data-filter="@obj.ToString()">
+                @obj.ToString()
+            </button>
+        }
+    </div>
+    <form method="get">
+        <div class="container p-4 my-3">
+            <h2 class="text-info">Rooms Management</h2>
+            <div class="border bg-white p-3" style="border-radius:15px;">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row" style="padding-top:10px;">
+                            <div class="col-4">
+                                @Html.Editor("searchName", new{htmlAttributes = new{@class="form-control",@placeholder="Name..."}})
+                            </div>
+                            <div class="col-4">
+                                @Html.DropDownList("searchCountPlayer",
+                                new SelectList(Model.CountPerson),
+                                "--Count Person--",
+                                new { @class="form-control"})
+                            </div>
+                            <div class="col-4">
+                                @Html.DropDownList("searchPrice",
+                                new SelectList(Model.CountPrice),
+                                "--Price Level--",
+                                new { @class="form-control"})
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top:10px;">
+                            <div class="col-4  ">
+                                @Html.DropDownList("srchDifLvl",
+                                new SelectList(Enum.GetValues(typeof(DifficultLevel))),
+                                "--Difficult Level--",
+                                new { @class="form-control"})
+                            </div>
+                            <div class="col-4  ">
+                                @Html.DropDownList("ScrFerLvl",
+                                new SelectList(Enum.GetValues(typeof(FearLevel))),
+                                "--Fear Level--",
+                                new { @class="form-control"})
+                            </div>
+                            <input type="text" id="inputreset" name="inputreset" class="col-4" hidden />
+                        </div>
+                        <div class="row pt-1">
+                            <div class="offset-2 col-2  ">
+                                <button type="submit" class="h-100 btn btn-info form-control">
+                                    <i class="fas fa-search"></i>Search
+                                </button>
+                            </div>
+                            <div class="offset-2 col-2  ">
+
+                                <button type="submit" class="h-100 btn btn-danger form-control btn_reset">
+                                    <i class="fas fa-search"></i>Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        @foreach (var prod in Model.Rooms)
+        {
+            <!--Partial View (Shared/_IndividualProductCard.cshtml)-->
+            <partial name="_IndividualRoomCard" model="prod" />
+            //display all products
+        }
+    </div>
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-outline-dark btn-info  btn-lg">
+            <i class="fa-solid fa-angles-left"></i>
+        </a>
+    }
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-outline-dark btn-info  btn-lg">
+            <i class="fa-solid fa-angles-right"></i>
+        </a>
+    }
+</div>
+
+@section Scripts
+    {
+    <!--for filter main menu-->
+    <script>
+        $(document).ready(function() {
+
+            $(".filter-button").click(function() {
+                var value = $(this).attr('data-filter');
+
+                if (value == "all") {
+                    $('.filter').show('slow');
+                }
+                else {
+                    $(".filter").not('.' + value).hide('fast');            //скрить все что не соответсвует
+                    $(".filter").filter('.' + value).show('fast');        //показать все что  соответсвует
+                }
+            });
+        });
+        $('.btn_reset').click(function() {
+            $("#inputreset").val("reset");
+        });
+    </script>
+}

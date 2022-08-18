@@ -1,0 +1,124 @@
+﻿@model QuestRooms6_Model.ViewModels.RoomUserVM
+@using QuestRooms6_Model
+@if (Model.RoomList.Count() > 0)
+{
+    <form method="post">
+        <br />
+        <div class="backgundWhiteBorder">
+            <div class="container row">
+                <div class="col -8">
+                    <div class="card mt-4">
+                        <div class="card-header bg-dark text-light ml-0 row container">
+                            <div class="col-6">
+                                <i class="fa fa-shopin-cart"></i>&nbsp;
+                                Shoping Cart
+                            </div>
+                            <div class="col-6 text-right">
+                                <a asp-action="RemoveAll" asp-controller="Cart" class="btn btn-outline-warning btn-sm">Clear Cart</a>
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info btn-sm">Continue Shopping</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-none d-lg-block">
+                                <div class="row" style="color:#821f3d">
+                                    <div class="col-lg-2">
+                                    </div>
+                                    <div class="col-12 col-lg-3">
+                                        @Model.AplicationUser.FullName
+                                    </div>
+                                    <div class="col-12 col-lg-3">
+                                        @Model.AplicationUser.Email
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        @Model.AplicationUser.PhoneNumber
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-1">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            @{
+                                var orderTotal = 0.0;
+                            }
+                            @for (int i = 0; i < Model.RoomList.Count(); i++)
+                            {
+                                 string imreBase64Data = Convert.ToBase64String(Model.RoomList[i].BytesImage);
+                                 string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                                
+
+                                <input hidden asp-for="@Model.RoomList[i].Id" />
+                                <input type="hidden" asp-for="@Model.RoomList[i].Id" />
+                                <input type="hidden" asp-for="@Model.RoomList[i].Name" />
+                                <input type="hidden" asp-for="@Model.RoomList[i].Price" />
+                                <input type="" readonly asp-for="@Model.RoomList[i].TimeOrderRoom" />
+                                <input type="hidden" asp-for="@Model.RoomList[i].CountPlayers" />
+                                <input type="hidden" asp-for="@Model.RoomList[i].DifltLevel" />
+                                <input type="hidden" asp-for="@Model.RoomList[i].FLevel" />
+                                <input type="hidden" asp-for="@Model.RoomList[i].Image" />
+                                <input type="" readonly asp-for="@Model.RoomList[i].DateOrderRoom" />
+
+                                <input type="hidden" asp-for="@Model.AplicationUser.Id" />
+                                <input type="hidden" asp-for="@Model.AplicationUser.PhoneNumber" />
+                                <input type="hidden" asp-for="@Model.AplicationUser.Email" />
+                                <input type="hidden" asp-for="@Model.AplicationUser.FullName" />
+
+                                <div class="row h-100">
+                                    <div class="col-4 col-md-2 text-center py-2">
+                                       @* <img src="@WebConstanta.ImagePath@Model.RoomList[i].Image" class="rounded w-100" />*@
+                                        <img src="@imgDataURL" class="rounded w-100" />
+                                    </div>
+                                    <div class="col-8 col-lg-7">
+                                        <h5>@Model.RoomList[i].Name</h5>
+                                        <div style="font-size:11px;">@Model.RoomList[i].Description</div>
+                                    </div>
+
+                                    @*summ*@
+                                    <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
+                                        <span style="font-size:17px;">$@Model.RoomList[i].Price</span>
+                                    </div>
+                                    <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
+                                        <a asp-action="Remove" asp-route-id="@Model.RoomList[i].Id" class="btn btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                orderTotal += Model.RoomList[i].Price;
+                                <hr />
+                            }
+                            <div class="row">
+                                <div class="col-12 text-right pr-4" style="color:#821f3d">
+                                    OrderTotal : @string.Format("{0:c}",orderTotal);
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-6 col-md-3 offset-md-6">
+                                    @if (User.IsInRole(WebConstanta.AdminRole))
+                                    {
+                                        <input type="submit" asp-controller="Home" asp-action="Index" value="Back" class=" btn btn-info form-control" />
+                                    }
+                                </div>
+                                <div class="col-6 col-md-3 ">
+
+                                    <button type="submit" asp-controller="Cart" asp-action="Send" class="btn btn-success form-control btn-send">
+                                        <span>Send Order</span>
+                                    </button>
+                                </div>
+                                <input type="text" id="inputSend" name="inputSend" class="col-4" hidden />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <p>Please Add Items to Card!!! </p>
+}
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

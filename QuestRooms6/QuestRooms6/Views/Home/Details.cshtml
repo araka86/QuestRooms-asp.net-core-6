@@ -1,0 +1,72 @@
+﻿@model QuestRooms6_Model.ViewModels.IndexViewModel
+@using QuestRooms6_Model
+<div class="">
+    <form method="post">
+        <input asp-for="@Model.Room.Id" hidden />
+        <div class="container backgroundWhite pt-4">
+            <div class="card" style="border:1px solid #000000; ">
+                <div class="card-header bg-dark text-light ml-0 row container" style="border-radius: 0px;">
+                    <div class="col-12 col-md-6">
+                        <h1 class="text-white">@Model.Room.Name</h1>
+                    </div>
+                    <div class="col-12 col-md-6 text-md-right">
+                        <h1 class="text-warning"> @((Model.Room.Price).ToString("c"))</h1>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-4 p-1 text-center">
+                              @*  <img src="@WebConstanta.ImagePath@Model.Room.Image" class="rounded w-100" />*@
+                                <img src="@ViewBag.ImageData" class="rounded w-100" />
+                            </div>
+                            <div class="col-12 col-lg-8">
+                                <div class="row pl-3">
+                                    <div class="col-12">
+                                        <span class="badge p-3 border text-dark" style="background-color:lavenderblush">@Model.Room.DifltLevel</span>
+                                        <span class="badge p-3 border text-dark" style="background-color:azure">@Model.Room.FLevel</span>
+                                        <h3 class="text-success"></h3>
+                                        <p class="text-secondary">@Html.Raw(Model.Room.Description) </p> <!--use sumerNote-->
+                                    </div>
+                                    <form method="post">
+                                        <p>Choise Date:</p>
+                                        <div class="form-group m-2">
+                                            <input type="date" asp-for="Room.DateOrderRoom" asp-format="{0:dd-mm-yyyy} class="form-control" id="ShippingDate" />
+
+                                            <span asp-validation-for="Room.DateOrderRoom" class="text-danger"></span>
+                                        </div>
+                                        <p>Choise Time:</p>
+                                        <div class="form-group  m-2">
+                                            <select asp-for="Room.TimeOrderRoom" asp-items="@ViewBag.timeList"></select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-dark">
+                    <div class="row">
+                        <div class="col-12 col-md-6 pb-1 ">
+                            <a asp-action="Index" class="btn btn-success btn-square form-control btn-lg" style="height:50px;">Back to List</a>
+                        </div>
+                        <!--Button-->
+                        <div class="col-12 col-md-6 ">
+                            @if (Model.ExistInCart) /*  public IActionResult Details(int id) */
+                            {
+                                <a asp-action="RemoveFromCart" asp-route-id="@Model.Room.Id" class="btn btn-warning btn-square form-control btn-lg" style="height:50px;">Remove from Cart</a>
+                            }
+                            else
+                            {
+                                <button type="submit" asp-route-id="@Model.Room.Id" class="btn btn-info form-control btn-lg" style="height:50px;">Add to Cart</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

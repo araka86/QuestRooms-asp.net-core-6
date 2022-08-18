@@ -1,0 +1,97 @@
+﻿@model IEnumerable<QuestRooms6_Model.Room>
+@{
+    ViewData["Title"] = "Rooms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container p-md-3 table-responsive-md bg-white">
+    <div class="row pt-md-4">
+        <div class="col-md-6">
+            <h2 class="text-primary">Room List</h2>
+        </div>
+        @if (User.IsInRole(WebConstanta.AdminRole))
+        {
+            <div class="col-md-6 text-right">
+                <a asp-controller="Rooms" asp-action="Upsert" class="btn btn-primary">
+                    <i class="fa-solid fa-circle-plus"></i> &nbsp;
+                    Create New Room
+                </a>
+            </div>
+        }
+    </div>
+    <form method="get">
+        <div class="container p-4 my-3">
+            <h2 class="text-info">Rooms Management</h2>
+            <div class="border bg-white p-3" style="border-radius:15px;">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row" style="padding-top:10px;">
+                            <div class="col-4">
+                                @Html.Editor("searchName", new{htmlAttributes = new{@class="form-control",@placeholder="Name..."}})
+                            </div>
+                            <div class="col-4">
+                                @Html.Editor("searchCountPlayer", new{htmlAttributes = new{@class="form-control",@placeholder="CountPlayers..."}})
+                            </div>
+                            <div class="col-4">
+                                @Html.Editor("searchPrice", new{htmlAttributes = new{@class="form-control",@placeholder="Price..."}})
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top:10px;">
+                            <div class="col-4  ">
+                                @Html.DropDownList("srchDifLvl",
+                                new SelectList(Enum.GetValues(typeof(DifficultLevel))),
+                                "--Difficult Level--",
+                                new { @class="form-control"})
+                            </div>
+                            <div class="col-4  ">
+                                @Html.DropDownList("ScrFerLvl",
+                                new SelectList(Enum.GetValues(typeof(FearLevel))),
+                                "--Fear Level--",
+                                new { @class="form-control"})
+                            </div>
+                            <input type="text" id="inputreset" name="inputreset" class="col-4" hidden />
+                        </div>
+                        <div class="row pt-1">
+                            <div class="offset-2 col-2  ">
+                                <button type="submit" class="h-100 btn btn-info form-control">
+                                    <i class="fas fa-search"></i>Search
+                                </button>
+                            </div>
+                            <div class="offset-2 col-2  ">
+
+                                <button type="submit" class="h-100 btn btn-danger form-control btn_reset">
+                                    <i class="fas fa-search"></i>Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div>
+        <ejs-grid id="Grid" dataSource="@Model" allowFiltering="true" allowSorting="true" allowPaging="true">
+            <e-grid-filtersettings type="Menu"></e-grid-filtersettings>
+            <e-grid-pagesettings pageSize="10"></e-grid-pagesettings>
+            <e-grid-columns>
+                <e-grid-column field="Id" headerText="ID" isPrimaryKey="true" textAlign="Right" width="100"></e-grid-column>
+                <e-grid-column field="Name" headerText="Name" textAlign="Right"></e-grid-column>
+                <e-grid-column field="DifltLevel" headerText="DifficultLevel" textAlign="Right"></e-grid-column>
+                <e-grid-column field="CountPlayers" headerText="CountPlayers" textAlign="Right"></e-grid-column>
+                <e-grid-column field="FLevel" headerText="FearLevel" textAlign="Right"></e-grid-column>
+                <e-grid-column field="Price" headerText="Price" textAlign="Right"></e-grid-column>
+                <e-grid-column field="Id" headerText="" width=70
+                               template="<a rel='nofollow' href='Rooms/Upsert/${Id}' class='btn btn-primary'> <i class='fas fa-list'></i></a>">
+                </e-grid-column>
+            </e-grid-columns>
+        </ejs-grid>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $('.btn_reset').click(function() {
+            $("#inputreset").val("reset");
+        });
+    </script>
+}

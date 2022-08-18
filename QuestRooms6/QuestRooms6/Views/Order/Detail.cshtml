@@ -1,0 +1,125 @@
+﻿@model QuestRooms6_Model.ViewModels.OrderVm
+<form method="post">
+    <input asp-for="OrderHeader.Id" readonly />
+    <br />
+    <div class="backgroundWhite container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0 row container">
+                <div class="col-12 d-none d-md-block col-md-6 pb-1">
+                    <i class="fas fa-shopping-cart"></i> &nbsp; Order Summary
+                </div>
+                <div class="col-12 col-md-4 offset-md-2 text-right">
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-outline-info form-control btn-sm">Back to Orders</a>
+                </div>
+            </div>
+            <div class="card-body pb-0">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">PickUp Details:</span>
+                                </h4>
+                            </div>
+                            <!--------------------------Name--------------------------->
+                            <div class="row my-1">
+                                <div class="col-3">Name</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.FullName" readonly type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!--------------------------PhoneNumber--------------------------->
+                            <div class="row my-1">
+                                <div class="col-3">Phone</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.PhoneNumber" readonly type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!--------------------------Email--------------------------->
+                            <div class="row my-1">
+                                <div class="col-3">Email</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Email" readonly type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!--------------------------Order Date(дата заказа)--------------------------->
+                            <div class="row my-1">
+                                <div class="col-3">Order Date</div>
+                                <div class="col-9">
+                                    <input value="@Model.OrderHeader.OrderDate.ToShortDateString()" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-info">Order Summary</span>
+                            </h4>
+                            <ul class="list-group mb-3">
+                                @foreach (var detail in Model.OrderDetails)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between p-2">
+                                        <div class="row container">
+                                            <div class="col-4">
+                                                <h6 class="my-0 text-info">@detail.Room.Name</h6>
+                                                <small class="text-muted">Price : @detail.Price</small><br />
+                                            </div>
+                                            <div class="col-4">
+                                                FearLvl
+                                                <p class="text-success">@(detail.Room.FLevel)</p>
+                                            </div>
+                                            <div class="col-4">
+                                                DifltLevel
+                                                <p class="text-success">@(detail.Room.DifltLevel)</p>
+                                            </div>
+                                            <div class="col-12">
+                                                Description
+                                                <small class="text-muted"> @detail.Room.Description</small><br />
+                                            </div>
+                                            <hr/>
+                                             <div class="col-6">
+                                                Date Order
+                                                <small class="text-muted"> @detail.DateOrderRoom</small><br />
+                                            </div>
+                                             <div class="col-6">
+                                                Time Order
+                                                <small class="text-muted"> @detail.TimeOrderRoom</small><br />
+                                            </div>
+
+
+                                        </div>
+                                    </li>
+                                }
+                                <!---------------------------FinalOrderTotal---------------------------------->
+                                <li class="list-group-item bg-info">
+                                    <div class="row container">
+                                        <div class="col-6">
+                                            <h5 class="text-white">TOTAL </h5>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <h5 class="text-white">$@(Model.OrderHeader.FinalTotalPrice)</h5>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            var ShippingDate = document.getElementById("ShippingDate")
+            if (ShippingDate.value == '1/1/0001') {
+                ShippingDate.value = "";
+            }
+        })
+    </script>
+}

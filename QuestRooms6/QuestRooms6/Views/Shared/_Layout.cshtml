@@ -1,0 +1,108 @@
+﻿@using Microsoft.AspNetCore.Http
+@using static QuestRooms6_Model.AplicationUser
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QuestRooms6</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/fontawesome/css/all.css" />
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.2.36/fluent.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor03">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="Home" asp-action="Index"> Home </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pricing</a>
+                        </li>
+                        @if (User.IsInRole(WebConstanta.AdminRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Management</a>
+                                <div class="dropdown-menu">
+                                    <a class="nav-link text-dark" asp-controller="Client" asp-action="Index">Clients</a>
+                                    <a class="nav-link text-dark" href="#">Something else</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-controller="Rooms" asp-action="Index">Rooms</a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav ">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Hello @User.Identity.Name!</a>
+                                <div class="dropdown-menu">
+                                    <a class="nav-link text-dark" asp-controller="Order" asp-action="Index">History Order</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <input type="submit" class="btn form-control" value="Logout" />
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <!-- Chek session-->
+                <div>
+                    @if (HttpContextAccessor.HttpContext.Session.Get<List<Room>>(WebConstanta.SessionCart) != null)
+                    {
+                        <a asp-action="Index" asp-controller="Cart" class="nav-link">
+                            @{
+                                var count = HttpContextAccessor.HttpContext.Session.Get<List<Room>>(WebConstanta.SessionCart).Count;
+                            }
+                            <i class="fas fa-shopping-cart"> </i> &nbsp; (@count)
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-shopping-cart"></i>&nbsp; (0)
+                        </a>
+                    }
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - QuestRooms .net6
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.syncfusion.com/ej2/20.2.36/dist/ej2.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <ejs-scripts></ejs-scripts>
+</body>
+</html>
