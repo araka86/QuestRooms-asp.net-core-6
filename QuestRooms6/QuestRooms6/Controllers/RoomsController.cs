@@ -17,13 +17,6 @@ namespace QuestRooms6.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public FileContentResult myaAction(string path)
-        {
-            byte[] imgArray = System.IO.File.ReadAllBytes(path);
-            return new FileContentResult(imgArray, "image/jpg");
-        }
-
-
         public async Task<IActionResult> Index(string? searchName = null,
             int? searchCountPlayer = null,
             double? searchPrice = null,
